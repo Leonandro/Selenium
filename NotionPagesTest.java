@@ -12,6 +12,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -72,7 +73,8 @@ public class NotionPagesTest {
 		Thread.sleep(resources.LOGIN_WAIT_TIME);
 		
 		// Finding the find button by the xpath
-		WebElement options = driver.findElement(By.xpath("//*[text()='Quick Find']"));
+		WebElement options = new WebDriverWait(driver, Duration.ofSeconds(10))
+				.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[text()='Quick Find']")));
 
 		// Opening the search interface
 		options.click();
@@ -93,10 +95,71 @@ public class NotionPagesTest {
 		
 		assertEquals(driver.getTitle(), "Task List");
 		
+		Thread.sleep(resources.NORMAL_WAIT_TIME);
+		
+		loginUtil.doLogout(this.driver);
+		
+	}
+	
+	// Test for search a page that doesn't exist
+	@Test
+	public void testSearchAPageThatDontExist () throws InterruptedException {
+		
+		loginUtil.doLogin(this.driver);
+		
+		Thread.sleep(resources.LOGIN_WAIT_TIME);
+		
+		// Finding the find button by the xpath
+		WebElement options = new WebDriverWait(driver, Duration.ofSeconds(10))
+				.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[text()='Quick Find']")));
+				
+
+		// Opening the search interface
+		options.click();
+		
+		// Waiting until the password input appear
+		WebElement searchInput = new WebDriverWait(driver, Duration.ofSeconds(4))
+				.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@placeholder=\"Search leonandro's Notion…\"]")));
+		
+		searchInput.sendKeys("Page that don't exist");
+		
+		Thread.sleep(resources.NORMAL_WAIT_TIME);
+		
+		List <WebElement> queryResults = driver.findElements(By.xpath("//div[@class = 'notranslate search-query-result-item notion-focusable']"));
+		
+		assertEquals(queryResults.size(), 0);
+
+	}
+	
+	// Test for renaming a page 
+	// TODO finish this test
+	@Test
+	public void testRenameAPage () throws InterruptedException {
+		Actions actions = new Actions(driver);
+
+		
+		loginUtil.doLogin(this.driver);
+		
+		Thread.sleep(resources.LOGIN_WAIT_TIME);
+		
+		// Finding the page button by the xpath
+		WebElement page = driver.findElement(By.xpath("//*[text()='Untitled']"));
+
+		// Opening the search interface
+		actions.contextClick(page).perform();
+		
+		Thread.sleep(resources.NORMAL_WAIT_TIME);
+		
+		WebElement renameButton = driver.findElement(By.xpath("//*[text()='Rename']"));
+		
+		renameButton.click();
+		
+		
 		//loginUtil.doLogout(this.driver);
 		
 	}
-	// Test for search a page that doesn't exist
-	// Test for deleting a page
+	
+	//Test for deleting a page
+	
 	
 }
