@@ -1,5 +1,6 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.fail;
 
 import java.time.Duration;
 import java.util.List;
@@ -50,7 +51,7 @@ public class NotionPagesTest {
 		loginUtil.doLogin(this.driver);
 		
 		Thread.sleep(resources.LOGIN_WAIT_TIME);
-
+		Thread.sleep(resources.NORMAL_WAIT_TIME);
 		// Finding the Add page button by the xpath
 		WebElement options = driver.findElement(By.xpath("//*[text()='Add a page']"));
 
@@ -80,7 +81,7 @@ public class NotionPagesTest {
 		options.click();
 		
 		// Waiting until the password input appear
-		WebElement searchInput = new WebDriverWait(driver, Duration.ofSeconds(4))
+		WebElement searchInput = new WebDriverWait(driver, Duration.ofSeconds(10))
 				.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@placeholder=\"Search leonandro's Notion…\"]")));
 		
 		searchInput.sendKeys("Task List");
@@ -118,7 +119,7 @@ public class NotionPagesTest {
 		options.click();
 		
 		// Waiting until the password input appear
-		WebElement searchInput = new WebDriverWait(driver, Duration.ofSeconds(4))
+		WebElement searchInput = new WebDriverWait(driver, Duration.ofSeconds(10))
 				.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@placeholder=\"Search leonandro's Notion…\"]")));
 		
 		searchInput.sendKeys("Page that don't exist");
@@ -134,7 +135,7 @@ public class NotionPagesTest {
 	// Test for renaming a page 
 	// TODO finish this test
 	@Test
-	public void testRenameAPage () throws InterruptedException {
+	public void testDeleteAPage () throws InterruptedException {
 		Actions actions = new Actions(driver);
 
 		
@@ -150,12 +151,18 @@ public class NotionPagesTest {
 		
 		Thread.sleep(resources.NORMAL_WAIT_TIME);
 		
-		WebElement renameButton = driver.findElement(By.xpath("//*[text()='Rename']"));
+		WebElement deleteButton = driver.findElement(By.xpath("//*[text()='Delete']"));
 		
-		renameButton.click();
+		deleteButton.click();
 		
+		Thread.sleep(resources.NORMAL_WAIT_TIME);
+//		try {
+//			driver.findElement(By.xpath("//*[text()='Untitled']"));
+//			fail("The page was not deleted");
+//		} catch (Exception e) {
+//		}
 		
-		//loginUtil.doLogout(this.driver);
+		loginUtil.doLogout(this.driver);
 		
 	}
 	

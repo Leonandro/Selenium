@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.openqa.selenium.By;
 
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -58,7 +59,7 @@ public class NotionLoginTest {
 		try {
 			driver.findElement(By.id("notion-password-input-2"));
 			fail("A invalid email pass on the validation, this is bad!");
-		} catch (Exception e) {
+		} catch (NoSuchElementException e) {
 		}
 
 	}
@@ -167,9 +168,10 @@ public class NotionLoginTest {
 		logout.click();
 
 		Thread.sleep(this.resources.LOGIN_WAIT_TIME);
+		Thread.sleep(this.resources.NORMAL_WAIT_TIME);
 
 		// Is expected that the page will be redirected to the base url of the site
-		assertEquals(driver.getCurrentUrl(), this.resources.BASE_URL);
+		assertNotEquals(driver.getTitle(), "Getting Started");
 	}
 
 }
